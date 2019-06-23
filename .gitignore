@@ -1,1 +1,4 @@
 *.gz
+.idea/
+utils/
+data/
