@@ -1,9 +1,6 @@
 from utils import mnist_reader
 import numpy as np
-
-
 class Perceptron:
-
     def __init__(self, save_train_path, epoch, data_path,C,mira=False):
         w = [np.zeros(785) for i in range(10)]
         w[0][0] = 1
@@ -13,7 +10,6 @@ class Perceptron:
         self.epoch = epoch
         self.mira = mira
         self.C=C
-
     def perceptron_belong(self, img):
         MAX = -100000000000
         I = 0
@@ -22,7 +18,6 @@ class Perceptron:
                 MAX = np.dot(img, self.w[i][1:]) + self.w[i][0]
                 I = i
         return I
-
     def find_taw(self, wy, wy_star, img):
         taw=(np.dot((wy-wy_star)[1:],img)+wy[0]-wy_star[0]+1)/(2*np.dot(img,img)+2)
         return min(taw,self.C)
@@ -36,7 +31,6 @@ class Perceptron:
             self.w[label][0] += taw
             self.w[guessed_label][1:] = self.w[guessed_label][1:] - taw * img
             self.w[guessed_label][0] -= taw
-
     def train(self):
         images, labels = mnist_reader.load_mnist(self.data_path, kind='train')
         for e in range(self.epoch):
@@ -44,7 +38,6 @@ class Perceptron:
                 print(i)
                 self.perceptron_check(np.reshape(images[i], (784,)), labels[i])
             print(self.w)
-
     def test(self, test_data_path):
         images, labels = mnist_reader.load_mnist(test_data_path, kind='t10k')
         error = 0
@@ -57,7 +50,7 @@ class Perceptron:
 # print(((images[1])))
 from PIL import Image
 
-perc = Perceptron('saved_path', 2, 'data',1,mira=True)
+perc = Perceptron('saved_path', 1, 'data',0.5,mira=True)
 perc.train()
 ratio = perc.test('data')
 print(ratio)
