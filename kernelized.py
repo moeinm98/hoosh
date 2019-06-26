@@ -34,32 +34,44 @@ class Kernelized:
             self.w_index[guessed_label]=np.append(self.w_index[guessed_label],[i])
 
     def train(self):
+        print('learning...........')
         self.images, labels = mnist_reader.load_mnist(self.data_path, kind='train')
         for e in range(self.epoch):
             for i in range(len(self.images)):
                 print(i)
                 self.perceptron_check(np.reshape(self.images[i], (784,)),i, labels[i])
             print(self.w)
-        np.savetxt('learned.txt', self.w, fmt='%d')
+        with open("train.npy","wb") as file:
+            np.save(file, self.w,allow_pickle=True)
+        with open("train_label.npy" ,"wb") as file:
+            np.save(file, self.w_index,allow_pickle=True)
+
 
     def test(self, test_data_path):
-        self.w = np.loadtxt('learned.txt', dtype=int)
+        with open("train.npy", "rb") as file:
+            self.w = np.load(file,allow_pickle=True)
+        with open("train_label.npy", "rb") as file:
+            self.w_index = np.load(file,allow_pickle=True)
+        self.images, images_labels = mnist_reader.load_mnist(self.data_path, kind='train')
         images, labels = mnist_reader.load_mnist(test_data_path, kind='t10k')
         error = 0
+        print('Testing...........')
         for i in range(len(images)):
+            print(i)
+            if i==2000:break
             guessed_label = self.perceptron_belong(np.reshape(images[i], (784,)))
             if guessed_label != labels[i]: error += 1
+        print('finished testing . . .')
         return 100 - error / len(images) * 100
 
 
 # print(((images[1])))
 from PIL import Image
 perc = Kernelized('saved_path', 1, 'data')
-
-perc.train()
-# ratio = perc.test('data')
-print(perc.w)
-
+#
+# perc.train()
+ratio = perc.test('data')
+print('The accuracy is :'+str(ratio))
 
 # print(w)
 # w, h = 512, 512
@@ -73,3 +85,4 @@ print(perc.w)
 #
 # plt.imshow()
 # plt.show()
+
