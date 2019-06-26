@@ -33,6 +33,10 @@ class Perceptron:
             self.w[guessed_label][0] -= taw
     def train(self):
         images, labels = mnist_reader.load_mnist(self.data_path, kind='train')
+        self.images = np.array([])
+        for img in images:
+            a = abs(np.fft.fft2(np.reshape(img, (28, 28))))
+            np.append(self.images, a);
         for e in range(self.epoch):
             for i in range(len(images)):
                 print(i)
@@ -50,7 +54,7 @@ class Perceptron:
 # print(((images[1])))
 from PIL import Image
 
-perc = Perceptron('saved_path', 1, 'data',0.5,mira=True)
+perc = Perceptron('saved_path', 7, 'data',0.5,mira=False)
 perc.train()
 ratio = perc.test('data')
 print(ratio)

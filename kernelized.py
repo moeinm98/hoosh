@@ -65,10 +65,11 @@ print(perc.w)
 # w, h = 512, 512
 # data = np.zeros((h, w, 3), dtype=np.uint8)
 # data[256, 256] = [255, 0, 0]
-# img = Image.fromarray(X_train[0])
+# img = Image.fromarray(images[0])
 # img.show()
 #
-#
+
 # from matplotlib import pyplot as plt
+#
 # plt.imshow()
 # plt.show()
