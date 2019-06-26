@@ -39,7 +39,8 @@ class Kernelized:
         for e in range(self.epoch):
             for i in range(len(self.images)):
                 print(i)
-                self.perceptron_check(np.reshape(self.images[i], (784,)),i, labels[i])
+                # if i == 2000: break
+                self.perceptron_check(self.images[i],i, labels[i])
             print(self.w)
         with open("train.npy","wb") as file:
             np.save(file, self.w,allow_pickle=True)
@@ -58,8 +59,8 @@ class Kernelized:
         print('Testing...........')
         for i in range(len(images)):
             print(i)
-            if i==2000:break
-            guessed_label = self.perceptron_belong(np.reshape(images[i], (784,)))
+            if i==1000:break
+            guessed_label = self.perceptron_belong(images[i])
             if guessed_label != labels[i]: error += 1
         print('finished testing . . .')
         return 100 - error / len(images) * 100
@@ -68,11 +69,14 @@ class Kernelized:
 # print(((images[1])))
 from PIL import Image
 perc = Kernelized('saved_path', 1, 'data')
-#
-# perc.train()
+import time
+start_time = time.time()
+perc.train()
+finish_time=("---   RunTime  Hours  ---" + str((time.time() - start_time)/3600))
+print(finish_time)
 ratio = perc.test('data')
 print('The accuracy is :'+str(ratio))
-
+print(finish_time)
 # print(w)
 # w, h = 512, 512
 # data = np.zeros((h, w, 3), dtype=np.uint8)
